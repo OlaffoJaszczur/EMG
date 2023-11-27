@@ -1,12 +1,11 @@
-#include <Arduino.h>
 #include <Servo.h>
 
 Servo myservo;  // create servo object to control a servo
 
 int emgPin = A0;  // analog input pin for the EMG sensor
-int empRawPin = A1; // analog input pin for the EMG raw signal sensor
+int emgRawPin = A1;
+int emgRawValue = 0;
 int emgValue = 0; // variable to store the value read from the sensor
-int emgRawValue = 0; // variable to store the value read from the raw signal sensor
 int threshold = 600; // threshold value to detect muscle activity
 bool muscleConstricted = false; // flag to track muscle activity
 
@@ -21,15 +20,11 @@ const int stepSize = 1; // step size for smooth movement
 void setup() {
     myservo.attach(3); // attaches the servo on pin 9 to the servo object
     pinMode(emgPin, INPUT);
-    pinMode(empRawPin, INPUT);
     Serial.begin(9600);
 }
 
 void loop() {
     emgValue = analogRead(emgPin); // read the value from the sensor
-    emgRawValue = analogRead(empRawPin); //read the value from the raw signal sensor
-    Serial.print(emgRawValue);
-    Serial.print(" ");
     Serial.println(emgValue);
 
     if (emgValue > threshold && !muscleConstricted) {
@@ -59,4 +54,7 @@ void loop() {
 
     myservo.write(map(analogRead(A0),0,1023,0,180));
     delay(50);
+
+    emgRawValue = analogRead(emgRawPin); // read the value from the sensor
+    Serial.println(emgRawValue);
 }
