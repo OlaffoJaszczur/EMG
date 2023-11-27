@@ -57,6 +57,6 @@ void loop() {
         delay(5); // delay for smoother transition
     }
 
-    myservo.write(map(analogRead(A0),0,1023,0,180));
+    myservo.write(map(analogRead(emgPin),0,1023,0,180));
     delay(50);
 }
