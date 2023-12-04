@@ -89,7 +89,7 @@ int empRawPin = A1; // analog input pin for the EMG raw signal sensor
 int emgValue = 0; // variable to store the value read from the sensor
 int emgRawValue = 0; // variable to store the value read from the raw signal sensor
 int threshold = 200; // threshold value to detect muscle activity
-int fs = 9800; // sampling frequeancy Hz
+int fs = 16000; // sampling frequeancy Hz
 float pi = 3.14; // rounded PI
 
 const int numReadings = 10; // number of readings to smooth
@@ -100,13 +100,13 @@ int total = 0; // the running total
 int average = 0; // the average
 
 const float LowPassTarget = 500; //Target 500hz
-const float HighPassTarget = 5; //Target 5hz
+const float HighPassTarget = 20; //Target 20hz
 const float CentralFrequency = sqrt(LowPassTarget*HighPassTarget);
 const float Bandwidth = LowPassTarget-HighPassTarget;
 // Filter instance
 BandPass<2> lp(CentralFrequency,Bandwidth, fs,true);
 
-const int rmsWindowSize = 7; // Size of the RMS window
+const int rmsWindowSize = 50; // Size of the RMS window
 float rmsValues[rmsWindowSize]; // Array to hold the last 'rmsWindowSize' rectified values
 int rmsIndex = 0; // Index for the next RMS value
 float sumOfSquares = 0; // Sum of the squares of the last 'rmsWindowSize' values
@@ -138,7 +138,7 @@ void loop() {
     // Normalize the signal to be between -5 and 5 micV
     float rawValue = (rawValue - 204.6) / 204.6;
     // Amplify the signal's strength
-    rawValue = emgRawValue*100;
+    rawValue = emgRawValue*10000;
     Serial.print(rawValue);
     Serial.print(" ");
 
