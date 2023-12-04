@@ -99,8 +99,8 @@ int readIndex = 0; // the index of the current reading
 int total = 0; // the running total
 int average = 0; // the average
 
-const float LowPassTarget = 500; //Target 400hz
-const float HighPassTarget = 5; //Target 10hz
+const float LowPassTarget = 500; //Target 500hz
+const float HighPassTarget = 5; //Target 5hz
 const float CentralFrequency = sqrt(LowPassTarget*HighPassTarget);
 const float Bandwidth = LowPassTarget-HighPassTarget;
 // Filter instance
@@ -130,13 +130,17 @@ void setup() {
 void loop() {
     emgValue = analogRead(emgPin); // read the value from the sensor
     emgRawValue = analogRead(empRawPin); //read the value from the raw signal sensor
-    Serial.println("emgRawValue,rectifiedValue,rmsValue,emgValue, emgRmsValue");
     Serial.print(emgRawValue);
     Serial.print(" ");
 
 // Filtering part of project
 
-    float rawValue = emgRawValue*100;
+    // Normalize the signal to be between -5 and 5 micV
+    float rawValue = (rawValue - 204.6) / 204.6;
+    // Amplify the signal's strength
+    rawValue = emgRawValue*100;
+    Serial.print(rawValue);
+    Serial.print(" ");
 
     // Apply the band-pass filter
     float bandPassValue = lp.filt(rawValue);  // Variable to store band-pass filter output
