@@ -301,7 +301,7 @@ void loop() {
     // calculate the average:
     average = total / numReadings;
     // send it to the servo
-    myservo.write(map(average, 0, 600, 0, 180));
+    myservo.write(map(average, threshold, 600, 0, 180));
 
     // print the average to the Serial Monitor:
     //Serial.print("Average analog reading: ");
